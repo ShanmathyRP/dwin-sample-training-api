@@ -1,0 +1,4 @@
+### HTTP Configuration ###
+http:
+  host: "localhost"
+  port: "8082"

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="18dbeb84-0d73-4893-b15b-835cbc0d4c5b" >
+		<http:listener-connection host="${http.host}" port="${http.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="e213cd43-2b7a-4948-946e-0ecf4e06991e" file="properties/${env}.yaml" />
+	<flow name="sampleFlow" doc:id="fe0fee04-ad62-487d-ad82-23b0ece36920" >
+		<http:listener doc:name="Listener" doc:id="92ba68c0-f178-4778-aa92-5aec22c2c6e7" config-ref="HTTP_Listener_config" path="/api/*"/>
+		<logger level="INFO" doc:name="Logger" doc:id="88594e6b-0a3f-483f-8bfd-d0fbf4d7c23d" message="Start logger"/>
+		<ee:transform doc:name="Transform Message" doc:id="126197a6-860f-4ceb-916f-6ce171df2d07" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Status": "Successfully deployed",
+	"Time": now(),
+	"ID": uuid()
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
